@@ -34,15 +34,15 @@ class Blip
 
   bloop: (lat, long, eventName='') ->
     p = @map.locationPoint({lat: lat, lon: long});
-    color = @colorMap(eventName)
-    @draw(p.x, p.y, 1500, 'none', 'none', {width:5, opacity:1}, {width:1, opacity:0}, 0, 50, color[0], color[1])
+    data = @eventMap(eventName)
+    @draw(p.x, p.y, 2000, 'none', 'none', {width:data.startStroke, opacity:1}, {width:1, opacity:0}, 0, 50, data.startColor, data.endColor)
 
   # window.blip.bloop(35.2269, -80.8433, 'firstRequest')
   # window.blip.bloop(35.2269, -80.8433, 'request')
-  colorMap: (eventName) ->
-    colorMapping =
-      firstRequest: ['hsl(0,20%,88%)', 'hsl(0,90%,48%)']
-      request: ['hsl(205,70%,88%)', 'hsl(205,70%,48%)']
-    return colorMapping[eventName] || colorMapping['request']
+  eventMap: (eventName) ->
+    eventMapping =
+      firstRequest: {startColor: 'hsl(0,20%,88%)', endColor: 'hsl(0,90%,48%)', startStroke: 10}
+      request: {startColor: 'hsl(205,70%,88%)', endColor: 'hsl(205,70%,48%)', startStroke: 3}
+    return eventMapping[eventName] || eventMapping['request']
 
 module.exports = Blip
