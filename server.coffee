@@ -30,6 +30,7 @@ app.listen 3000
 socket = io.listen app
 
 handleMessage = (channel, json) ->
+  return unless json.ip
   json = JSON.parse json
   json.ip = '66.249.66.162' if json.ip == '127.0.0.1'
   geo = geoip.lookup(json.ip)
