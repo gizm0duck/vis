@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <%= stylesheet_link_tag    "application", :media => "all" %>
+  <%= javascript_include_tag "application" %>
+  <%= csrf_meta_tags %>
+  <style type="text/css">
+
+  #map {
+    background: #021019;
+  }
+
+  .compass .back {
+    fill: #256574;
+  }
+
+  .compass .fore, .compass .chevron {
+    stroke: #1AA398;
+  }
+
+  #copy, #copy a {
+    color: #1AA398;
+  }
+
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+  <script src="http://underscorejs.org/underscore-min.js"></script>
+  <script src="http://cdn.socket.io/stable/socket.io.js"></script>
+
+</body>
+</html>
+
+
