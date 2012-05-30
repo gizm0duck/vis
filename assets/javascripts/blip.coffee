@@ -35,6 +35,6 @@ class Blip
       .remove()
       
   bloop: (lat, long, eventName='') -> 
-    p = @map.locationPoint({lat: lat, long: long});
+    p = @map.locationPoint({lat: lat, lon: long});
 
     @draw(p.x, p.y, 1000, 'none', 'none', {width:3, opacity:1}, {width:0, opacity:0}, 0, 75, 'hsl(205,70%,88%)', 'hsl(205,70%,48%)')
