@@ -50,6 +50,7 @@ Foreman.prototype.handleMessage = function(json_msg) {
       json.ip = '66.249.66.162';
     }
     var geo = geoip.lookup(json.ip)
+    // # publish to client here
     console.log(json.ip, geo);
   }
 };
