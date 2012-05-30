@@ -29,8 +29,11 @@ app.configure ->
 app.listen 3000
 socket = io.listen app
 
+events = ['firstRequest', 'request']
 handleMessage = (channel, json) ->
   return unless json.ip
+  return unless json.eventName in events
+  console.log 'message', json
   json = JSON.parse json
   json.ip = '66.249.66.162' if json.ip == '127.0.0.1'
   geo = geoip.lookup(json.ip)
