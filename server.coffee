@@ -31,11 +31,11 @@ socket = io.listen app
 
 handleMessage = (channel, json) ->
   json = JSON.parse json
-  json.ip = '66.249.66.162' if json.ip = '127.0.0.1'
+  json.ip = '66.249.66.162' if json.ip == '127.0.0.1'
   geo = geoip.lookup(json.ip)
   json.geo = geo
   socket.sockets.emit 'message', json
 
-client = redis.createClient(6379, redisConf[process.env.NODE_ENV])
+client = redis.createClient(6379, redisConf[process.env.NODE_ENV].host)
 client.subscribe('Learnist:Visualizer')
 client.on 'message', handleMessage
