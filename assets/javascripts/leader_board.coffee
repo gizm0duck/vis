@@ -4,12 +4,9 @@ class LeaderBoard
   updateStats: (json) ->
     return unless json.stats
     for countryName, count of json.stats
-      console.log("div[data-name='#{countryName}']")
       if $("div[data-name='#{countryName}']").length != 0
-        console.log("update")
         @updateCountry(countryName, count)
       else
-        console.log("insert")
         @insertCountry(countryName, count)
   
   updateCountry: (name, count) ->
