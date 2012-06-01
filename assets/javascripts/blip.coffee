@@ -8,9 +8,6 @@ class Blip
 
     @map.add(@po.compass().pan("none"))
     @layer = d3.select("#map svg").insert("svg:g").attr('class','points')
-    # @socket = new io.Socket("http://localhost", {port: 80})
-    # @socket.on 'geocodeData', (data) =>
-    #  @bloop(data.lat, data.long, data.eventName)
 
   draw: (x, y, duration, startFillColor, endFillColor, startStroke, endStroke, startRadius, endRadius, startColor, endColor) ->
     @layer.append("svg:circle")

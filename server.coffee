@@ -6,6 +6,7 @@ browserify = require 'browserify'
 geoip = require 'geoip-lite'
 io = require 'socket.io'
 redisConf = require './redis_conf'
+stats = require './stats'
 
 app = express.createServer()
 
@@ -28,17 +29,28 @@ app.configure ->
 
 app.listen 3000
 socket = io.listen app
-
+exports.stats = {}
 events = ['firstRequest', 'request']
 handleMessage = (channel, json) ->
   json = JSON.parse json
   return unless json.ip
   return unless json.eventName in events
   console.log 'message', json
-  json.ip = '66.249.66.162' if json.ip == '127.0.0.1'
-  geo = geoip.lookup(json.ip)
-  json.geo = geo
+  if json.ip == '127.0.0.1'
+    json.geo = defaultGeo()
+  else
+    json.geo = geoip.lookup(json.ip)
+    json.stats = stats.update(json.geo)
+  
   socket.sockets.emit 'message', json
+
+defaultGeo =() ->
+  { 
+    range: [ ],
+    country: 'US',
+    region: 'OH',
+    city: 'Wauseon',
+    ll: [ '41.5492', '-84.1417' ] }
 
 client = redis.createClient(6379, redisConf[process.env.NODE_ENV].host)
 client.subscribe('Learnist:Visualizer')
