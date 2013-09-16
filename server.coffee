@@ -28,7 +28,7 @@ app.configure ->
   app.use express.methodOverride()
 
 socket = io.listen app
-app.listen 3040
+app.listen (process.env.PORT || 3333)
 
 handleMessage = (channel, json) ->
   try
@@ -42,19 +42,19 @@ handleMessage = (channel, json) ->
     agent = json.payload?.headers?.HTTP_USER_AGENT || 'default'
     return unless geo?
     # stats.update(geo) unless ip == '127.0.0.1'
-  
+
     data =
       ip: ip
       geo: geo
       agent: agent
       # stats: stats
-  
+
     socket.sockets.emit 'message', data
   catch e
     # do nothing
 
 defaultGeo =() ->
-  { 
+  {
     range: [ ],
     country: 'US',
     region: 'OH',
