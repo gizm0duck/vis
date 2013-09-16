@@ -6,7 +6,7 @@ browserify = require 'browserify'
 geoip = require 'geoip-lite'
 io = require 'socket.io'
 redisConf = require './redis_conf'
-stats = require './stats'
+# stats = require './stats'
 
 app = express.createServer()
 
@@ -27,22 +27,31 @@ app.configure ->
   app.use express.bodyParser()
   app.use express.methodOverride()
 
-app.listen 3000
 socket = io.listen app
-exports.stats = {}
-events = ['firstRequest', 'request']
+app.listen 3040
+
 handleMessage = (channel, json) ->
-  json = JSON.parse json
-  return unless json.ip
-  return unless json.eventName in events
-  console.log 'message', json
-  if json.ip == '127.0.0.1'
-    json.geo = defaultGeo()
-  else
-    json.geo = geoip.lookup(json.ip)
-    json.stats = stats.update(json.geo)
+  try
+    json = JSON.parse json
+    return unless json.notification?.name == "process_action.action_controller"
+    return if json.payload?.headers?.HTTP_X_REQUESTED_WITH == 'XMLHttpRequest'
+    # console.log json
+
+    ip = json.payload?.headers?.HTTP_X_REAL_IP
+    geo = if ip == '127.0.0.1' then defaultGeo() else geoip.lookup(ip)
+    agent = json.payload?.headers?.HTTP_USER_AGENT || 'default'
+    return unless geo?
+    # stats.update(geo) unless ip == '127.0.0.1'
   
-  socket.sockets.emit 'message', json
+    data =
+      ip: ip
+      geo: geo
+      agent: agent
+      # stats: stats
+  
+    socket.sockets.emit 'message', data
+  catch e
+    # do nothing
 
 defaultGeo =() ->
   { 
@@ -53,5 +62,5 @@ defaultGeo =() ->
     ll: [ '41.5492', '-84.1417' ] }
 
 client = redis.createClient(6379, redisConf[process.env.NODE_ENV].host)
-client.subscribe('Learnist:Visualizer')
+client.subscribe('narratus_pub_sub')
 client.on 'message', handleMessage

@@ -29,17 +29,18 @@ class Blip
       .style("stroke-width", endStroke.width)
       .remove()
 
-  bloop: (lat, long, eventName='') ->
+  bloop: (lat, long, userAgent='') ->
     p = @map.locationPoint({lat: lat, lon: long});
-    data = @eventMap(eventName)
+    data = @agentMap(userAgent)
     @draw(p.x, p.y, 2000, 'none', 'none', {width:data.startStroke, opacity:1}, {width:1, opacity:0}, 0, 50, data.startColor, data.endColor)
 
   # window.blip.bloop(35.2269, -80.8433, 'firstRequest')
   # window.blip.bloop(35.2269, -80.8433, 'request')
-  eventMap: (eventName) ->
-    eventMapping =
-      firstRequest: {startColor: 'hsl(0,20%,88%)', endColor: 'hsl(0,90%,48%)', startStroke: 10}
-      request: {startColor: 'hsl(205,70%,88%)', endColor: 'hsl(205,70%,48%)', startStroke: 3}
-    return eventMapping[eventName] || eventMapping['request']
+  agentMap: (userAgent) ->
+    agentMapping =
+      dalvik: {startColor: 'hsl(0,20%,88%)', endColor: 'hsl(0,90%,48%)', startStroke: 6}
+      ios: {startColor: 'hsl(205,70%,88%)', endColor: 'hsl(205,70%,48%)', startStroke: 6}
+      web: {startColor: '#FFFF99', endColor: '#FFFFCC', startStroke: 6}
+    return agentMapping[userAgent] || agentMapping['web']
 
 module.exports = Blip

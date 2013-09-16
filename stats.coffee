@@ -2,7 +2,7 @@ class Stats
   constructor: ->
     @scoreboard = {}
     
-  update: (geo) ->
+  update: (geo) =>
     console.log("geo!!!", geo)
     if @scoreboard[geo.country]?
       ++@scoreboard[geo.country]
