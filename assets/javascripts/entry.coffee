@@ -4,6 +4,7 @@ LeaderBoard = require './leader_board'
 getBaseAgent = (userAgent) ->
   return 'dalvik' if userAgent.indexOf('Dalvik') != -1
   return 'ios' if userAgent.indexOf('Learnist') != -1
+  return 'ios' if userAgent.indexOf('learnist-ios') != -1
   return 'web'
 
 $ ->
